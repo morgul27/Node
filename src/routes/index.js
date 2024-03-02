@@ -13,13 +13,12 @@ router.get('/registro', registro);
 
 router.get('/connect', async (req, res) =>{
     await pool.query('SELECT 1+1 AS RESULT')
-res.json(result[0])
+    res.json(result[0])
 });
 
 router.post('/auth', async (req, res) => {
     const { username, password } = req.body;
     const isOk = await isAuth(username, password);
-    console.log(isOk);
 
     if (!username || !password || !isOk) {
       let errorMessage = "¡ESCRIBA UN USUARIO Y SU CONTRASEÑA!";
@@ -30,6 +29,7 @@ router.post('/auth', async (req, res) => {
       res.status(200).send("¡LOGIN CORRECTO!");
     }
   });
+
 
 router.post('/insertUsers', insertUsers)
 
