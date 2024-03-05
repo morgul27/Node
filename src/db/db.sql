@@ -10,4 +10,5 @@ CREATE TABLE users(
 
 DESCRIBE users;
 
-INSERT INTO base_de_datos users(id, nameuser, pswduser) VALUES (6, paco, dos) 
+INSERT INTO users(id, nameuser, pswduser) VALUES (6, 'paco', 'dos');
+SELECT * from users

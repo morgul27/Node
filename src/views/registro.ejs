@@ -11,29 +11,62 @@
 <body>
     <%- include ('./partials/navbar') %>
         <main>
-            <form action="/auth" method='POST'>
+            <form id="registrationForm">
                 <div class="registro-container">
                     <h2>Registro de Usuario</h2>
                     <div>
-                        <label for="username">Un nombre de usuario que no sea feo:</label>
+                        <label for="newUsername">Un nombre de usuario que no sea feo:</label>
                         <br>
-                        <input type="text" id="username" name="username" required>
+                        <input type="text" id="newUsername" name="newUsername">
                     </div>
                     <div>
-                        <label for="email">Tu correo electrónico más molon:</label>
+                        <label for="newPassword">Pon tu contraseña más segura:</label>
                         <br>
-                        <input type="email" id="email" name="email" required>
+                        <input type="password" id="newPassword" name="newPassword">
                     </div>
-                    <div>
-                        <label for="password">Pon tu contraseña más segura:</label>
-                        <br>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                        <button type="submit">Registrarse aqui, en este botón</button>
-                    </div>
+                    <button type="submit">Registrarse aqui, en este botón</button>
                 </div>
             </form>
         </main>
+
+        <!-- JavaScript para manejar el formulario de registro de usuario -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const registrationForm = document.getElementById('registrationForm');
+
+                registrationForm.addEventListener('submit', async function (event) {
+                    event.preventDefault();
+
+                    // Obtenemos los valores de usuario y contraseña del formulario
+                    const newUsername = registrationForm.querySelector('#newUsername').value;
+                    const newPassword = registrationForm.querySelector('#newPassword').value;
+
+                    // Enviar los datos del formulario al servidor para registro
+                    try {
+                        const response = await fetch('/registerUser', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ newUsername, newPassword })
+                        });
+
+                        // Verificar el estado de la respuesta
+                        if (response.ok) {
+                            const data = await response.json();
+                            alert(`¡Bienvenido, ${data.username}! Has sido registrado exitosamente.`);
+                        } else if (response.status === 409) {
+                            alert('El nombre de usuario ya existe en la base de datos. Por favor, elige otro.');
+                        } else {
+                            alert('Error interno del servidor'); // Otros errores
+                        }
+                    } catch (error) {
+                        console.error('Error al registrar usuario:', error);
+                        alert('Error al registrar usuario. Por favor, intenta de nuevo.');
+                    }
+                });
+            });
+        </script>
 </body>
 
 </html>

@@ -1,6 +1,6 @@
 //Importo solo el enrutador desde express
 import { Router } from "express";
-import { home, login, registro, insertUsers } from "../controllers/controllers.js";
+import { home, login, registro, curd, insertUsers, showUsers, registerUser, loginUser } from "../controllers/controllers.js";
 import { pool } from "../db.js";
 
 //Inicio de enrutador y almaceno en una constante
@@ -10,32 +10,17 @@ const router = Router();
 router.get('/', home);
 router.get('/login', login);
 router.get('/registro', registro);
+router.get('/curd', curd);
 
-router.get('/connect', async (req, res) =>{
-    await pool.query('SELECT 1+1 AS RESULT')
-    res.json(result[0])
+router.get('/connect', async (req, res) => {
+  await pool.query('SELECT 1+1 AS RESULT')
+  res.json(result[0])
 });
 
-router.post('/auth', async (req, res) => {
-    const { username, password } = req.body;
-    const isOk = await isAuth(username, password);
 
-    if (!username || !password || !isOk) {
-      let errorMessage = "¡ESCRIBA UN USUARIO Y SU CONTRASEÑA!";
-      if (isOk) errorMessage = "USUARIO y/o PASSWORD incorrectas";
-
-      res.status(400).send(errorMessage);
-    } else {
-      res.status(200).send("¡LOGIN CORRECTO!");
-    }
-  });
-
-
-router.post('/insertUsers', insertUsers)
-
-const isAuth = (username, password) => {
-    const res = pool.query('SELECT * FROM users WHERE nameuser=\'' + username + '\' AND pswd=\'' + password +'\'');
-    return res;
-}   
+router.post('/insertUsers', insertUsers);
+router.post('/registerUser', registerUser);
+router.post('/loginUser', loginUser);
+router.get('/showUsers', showUsers);
 
 export default router;
